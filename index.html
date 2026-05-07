@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABUAD Industrial Park - E-commerce Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .cart-icon {
+            position: relative;
+            font-size: 1.5rem;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-secondary {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        /* Products Grid */
+        .section-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            color: #667eea;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .product-stock {
+            color: #48bb78;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Cart Section */
+        .cart-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-weight: bold;
+        }
+
+        .cart-item-price {
+            color: #667eea;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            padding: 5px 10px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            text-align: right;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        /* Order Tracking */
+        .tracking-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .tracking-input {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tracking-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .tracking-status {
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+
+        .status-step {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 0.5rem;
+        }
+
+        .status-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .status-icon.completed {
+            background: #48bb78;
+            color: white;
+        }
+
+        .status-icon.active {
+            background: #667eea;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+
+        /* Admin Dashboard */
+        .admin-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .orders-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f7fafc;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+        }
+
+        .status-pending { background: #fef3c7; color: #d97706; }
+        .status-processing { background: #dbeafe; color: #2563eb; }
+        .status-dispatched { background: #d1fae5; color: #059669; }
+        .status-delivered { background: #d1fae5; color: #059669; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .payment-modal {
+            text-align: center;
+        }
+
+        .payment-success {
+            color: #48bb78;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<div class="navbar">
+    <div class="nav-container">
+        <div class="logo">🏭 ABUAD Industrial Park</div>
+        <div class="nav-links">
+            <a onclick="showPage('home')">Home</a>
+            <a onclick="showPage('products')">Products</a>
+            <a onclick="showPage('tracking')">Track Order</a>
+            <a onclick="showPage('admin')">Admin</a>
+            <div class="cart-icon" onclick="showPage('cart')">
+                🛒 <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Container -->
+<div class="container" id="mainContainer">
+    <!-- Home Page -->
+    <div id="homePage">
+        <div class="hero">
+            <h1>Welcome to ABUAD Industrial Park</h1>
+            <p>Quality products made in Nigeria for the world</p>
+            <button class="btn btn-primary" onclick="showPage('products')">Shop Now</button>
+        </div>
+
+        <h2 class="section-title">Our Products</h2>
+        <div class="products-grid" id="featuredProducts"></div>
+    </div>
+
+    <!-- Products Page -->
+    <div id="productsPage" style="display: none;">
+        <h2 class="section-title">All Products</h2>
+        <div class="products-grid" id="allProducts"></div>
+    </div>
+
+    <!-- Cart Page -->
+    <div id="cartPage" style="display: none;">
+        <div class="cart-section">
+            <h2>Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div id="cartEmpty" class="text-center" style="display: none; padding: 2rem;">
+                <p>Your cart is empty</p>
+                <button class="btn btn-primary" onclick="showPage('products')">Continue Shopping</button>
+            </div>
+            <div class="cart-total" id="cartTotal"></div>
+            <div style="text-align: right; margin-top: 1rem;">
+                <button class="btn btn-primary" onclick="showCheckout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tracking Page -->
+    <div id="trackingPage" style="display: none;">
+        <div class="tracking-section">
+            <h2>Track Your Order</h2>
+            <div class="tracking-input">
+                <input type="text" id="trackingNumber" placeholder="Enter Order Number (e.g., ORD-001)">
+                <button class="btn btn-primary" onclick="trackOrder()">Track Order</button>
+            </div>
+            <div id="trackingResult"></div>
+        </div>
+    </div>
+
+    <!-- Admin Page -->
+    <div id="adminPage" style="display: none;">
+        <div class="admin-section">
+            <h2>Admin Dashboard</h2>
+            <div class="stats-grid" id="adminStats"></div>
+            <h3>All Orders</h3>
+            <div class="orders-table" id="adminOrders"></div>
+            <h3 style="margin-top: 2rem;">Sales Report</h3>
+            <div id="salesReport"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Checkout Modal -->
+<div id="checkoutModal" class="modal">
+    <div class="modal-content">
+        <h2>Checkout</h2>
+        <form id="checkoutForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="customerName" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="customerEmail" required>
+            </div>
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="tel" id="customerPhone" required>
+            </div>
+            <div class="form-group">
+                <label>Delivery Address</label>
+                <textarea id="customerAddress" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>Payment Method</label>
+                <select id="paymentMethod">
+                    <option value="card">Card Payment</option>
+                    <option value="bank">Bank Transfer</option>
+                    <option value="cash">Cash on Delivery</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Place Order</button>
+            <button type="button" class="btn" onclick="closeModal('checkoutModal')">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<!-- Payment Success Modal -->
+<div id="paymentModal" class="modal">
+    <div class="modal-content payment-modal">
+        <div class="payment-success">✅</div>
+        <h2>Order Placed Successfully!</h2>
+        <p id="orderNumber"></p>
+        <p>You can track your order using the order number.</p>
+        <button class="btn btn-primary" onclick="closeModal('paymentModal'); showPage('tracking')">Track Order</button>
+    </div>
+</div>
+
+<script>
+    // Product Data
+    const products = [
+        { id: 1, name: "ABUAD COLA & ORGANIC DRINK", category: "Beverage", price: 1500, stock: 500, icon: "🥤" },
+        { id: 2, name: "ABUAD POUNDO YAM", category: "Food", price: 3000, stock: 300, icon: "🍠" },
+        { id: 3, name: "ABUAD FUFU FLOUR", category: "Food", price: 2500, stock: 400, icon: "🌾" },
+        { id: 4, name: "ABUAD OGI", category: "Cereal", price: 2000, stock: 350, icon: "🥣" },
+        { id: 5, name: "ABUAD RICE", category: "Grains", price: 4500, stock: 600, icon: "🍚" },
+        { id: 6, name: "ABUAD PLASTIC RECYCLER", category: "Equipment", price: 250000, stock: 10, icon: "♻️" }
+    ];
+
+    // Cart State
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Orders State
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+    // Update Cart Display
+    function updateCart() {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cartCount').innerText = cartCount;
+
+        if (document.getElementById('cartItems')) {
+            displayCart();
+        }
+    }
+
+    // Add to Cart
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        const existingItem = cart.find(item => item.id === productId);
+
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push({ ...product, quantity: 1 });
+        }
+
+        updateCart();
+        alert(`${product.name} added to cart!`);
+    }
+
+    // Display Cart
+    function displayCart() {
+        const cartContainer = document.getElementById('cartItems');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartEmpty = document.getElementById('cartEmpty');
+
+        if (!cartContainer) return;
+
+        if (cart.length === 0) {
+            cartContainer.innerHTML = '';
+            cartTotal.innerHTML = '';
+            cartEmpty.style.display = 'block';
+            return;
+        }
+
+        cartEmpty.style.display = 'none';
+
+        let total = 0;
+        cartContainer.innerHTML = cart.map(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            return `
+                <div class="cart-item">
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-price">₦${item.price.toLocaleString()}</div>
+                    </div>
+                    <div class="quantity-controls">
+                        <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                        <button class="btn-danger" style="padding: 5px 10px; margin-left: 10px;" onclick="removeFromCart(${item.id})">Remove</button>
+                    </div>
+                    <div style="font-weight: bold;">₦${itemTotal.toLocaleString()}</div>
+                </div>
+            `;
+        }).join('');
+
+        cartTotal.innerHTML = `Total: ₦${total.toLocaleString()}`;
+    }
+
+    function updateQuantity(id, newQuantity) {
+        if (newQuantity <= 0) {
+            removeFromCart(id);
+        } else {
+            const item = cart.find(i => i.id === id);
+            if (item) item.quantity = newQuantity;
+            updateCart();
+        }
+    }
+
+    function removeFromCart(id) {
+        cart = cart.filter(item => item.id !== id);
+        updateCart();
+    }
+
+    // Display Products
+    function displayProducts(containerId, productList) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        container.innerHTML = productList.map(product => `
+            <div class="product-card">
+                <div class="product-image">${product.icon}</div>
+                <div class="product-info">
+                    <div class="product-title">${product.name}</div>
+                    <div class="product-price">₦${product.price.toLocaleString()}</div>
+                    <div class="product-stock">✅ In Stock: ${product.stock}</div>
+                    <button class="btn btn-primary" onclick="addToCart(${product.id})">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Show Checkout
+    function showCheckout() {
+        if (cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        document.getElementById('checkoutModal').style.display = 'flex';
+    }
+
+    // Place Order
+    document.getElementById('checkoutForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const orderNumber = 'ORD-' + String(orders.length + 1).padStart(3, '0');
+
+        const order = {
+            id: orderNumber,
+            customer: {
+                name: document.getElementById('customerName').value,
+                email: document.getElementById('customerEmail').value,
+                phone: document.getElementById('customerPhone').value,
+                address: document.getElementById('customerAddress').value
+            },
+            items: [...cart],
+            total: total,
+            paymentMethod: document.getElementById('paymentMethod').value,
+            status: 'pending',
+            date: new Date().toLocaleString(),
+            tracking: {
+                status: 'pending',
+                updates: [
+                    { status: 'pending', description: 'Order received', date: new Date().toISOString() }
+                ]
+            }
+        };
+
+        orders.push(order);
+        localStorage.setItem('orders', JSON.stringify(orders));
+
+        // Clear cart
+        cart = [];
+        updateCart();
+
+        closeModal('checkoutModal');
+
+        document.getElementById('orderNumber').innerHTML = `Order Number: ${orderNumber}`;
+        document.getElementById('paymentModal').style.display = 'flex';
+
+        // Simulate auto status update after 30 seconds (for demo)
+        setTimeout(() => {
+            const savedOrders = JSON.parse(localStorage.getItem('orders')) || [];
+            const orderIndex = savedOrders.findIndex(o => o.id === orderNumber);
+            if (orderIndex !== -1) {
+                savedOrders[orderIndex].status = 'processing';
+                savedOrders[orderIndex].tracking.status = 'processing';
+                savedOrders[orderIndex].tracking.updates.push({
+                    status: 'processing',
+                    description: 'Order is being processed',
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('orders', JSON.stringify(savedOrders));
+                orders = savedOrders;
+            }
+        }, 30000);
+    });
+
+    // Track Order
+    function trackOrder() {
+        const trackingNumber = document.getElementById('trackingNumber').value;
+        const order = orders.find(o => o.id === trackingNumber);
+        const resultDiv = document.getElementById('trackingResult');
+
+        if (!order) {
+            resultDiv.innerHTML = `
+                <div class="tracking-status">
+                    <p style="color: red;">Order not found. Please check your order number.</p>
+                </div>
+            `;
+            return;
+        }
+
+        const statusSteps = ['pending', 'processing', 'dispatched', 'delivered'];
+        const currentStepIndex = statusSteps.indexOf(order.status);
+
+        resultDiv.innerHTML = `
+            <div class="tracking-status">
+                <h3>Order: ${order.id}</h3>
+                <p><strong>Customer:</strong> ${order.customer.name}</p>
+                <p><strong>Date:</strong> ${order.date}</p>
+                <p><strong>Total:</strong> ₦${order.total.toLocaleString()}</p>
+
+                <div style="margin-top: 2rem;">
+                    <h4>Order Status</h4>
+                    ${statusSteps.map((step, index) => `
+                        <div class="status-step">
+                            <div class="status-icon ${index < currentStepIndex ? 'completed' : index === currentStepIndex ? 'active' : ''}">
+                                ${index < currentStepIndex ? '✓' : index === currentStepIndex ? '●' : '○'}
+                            </div>
+                            <div>
+                                <strong>${step.toUpperCase()}</strong>
+                                ${index === currentStepIndex ? '<br><small>Current Status</small>' : ''}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h4>Order Updates</h4>
+                    ${order.tracking.updates.map(update => `
+                        <div style="margin: 0.5rem 0; padding: 0.5rem; background: #f7fafc; border-radius: 5px;">
+                            <strong>${update.status.toUpperCase()}</strong> - ${new Date(update.date).toLocaleString()}
+                            <br><small>${update.description}</small>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    // Admin Dashboard
+    function loadAdminDashboard() {
+        const statsDiv = document.getElementById('adminStats');
+        const ordersDiv = document.getElementById('adminOrders');
+        const salesDiv = document.getElementById('salesReport');
+
+        const totalOrders = orders.length;
+        const pendingOrders = orders.filter(o => o.status === 'pending').length;
+        const processingOrders = orders.filter(o => o.status === 'processing').length;
+        const dispatchedOrders = orders.filter(o => o.status === 'dispatched').length;
+        const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
+
+        statsDiv.innerHTML = `
+            <div class="stat-card">
+                <h3>Total Orders</h3>
+                <p style="font-size: 2rem;">${totalOrders}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Pending</h3>
+                <p style="font-size: 2rem;">${pendingOrders}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Processing</h3>
+                <p style="font-size: 2rem;">${processingOrders}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Dispatched</h3>
+                <p style="font-size: 2rem;">${dispatchedOrders}</p>
+            </div>
+            <div class="stat-card">
+                <h3>Revenue</h3>
+                <p style="font-size: 2rem;">₦${totalRevenue.toLocaleString()}</p>
+            </div>
+        `;
+
+        ordersDiv.innerHTML = `
+            <table>
+                <thead>
+                    <tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    ${orders.map(order => `
+                        <tr>
+                            <td>${order.id}</td>
+                            <td>${order.customer.name}</td>
+                            <td>₦${order.total.toLocaleString()}</td>
+                            <td><span class="status-badge status-${order.status}">${order.status}</span></td>
+                            <td>
+                                <select onchange="updateOrderStatus('${order.id}', this.value)">
+                                    <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                                    <option value="dispatched" ${order.status === 'dispatched' ? 'selected' : ''}>Dispatched</option>
+                                    <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                </select>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+
+        if (orders.length === 0) {
+            ordersDiv.innerHTML = '<p>No orders yet.</p>';
+        }
+
+        // Sales chart (simple)
+        const salesByDay = {};
+        orders.forEach(order => {
+            const date = new Date(order.date).toLocaleDateString();
+            salesByDay[date] = (salesByDay[date] || 0) + order.total;
+        });
+
+        salesDiv.innerHTML = `
+            <div style="background: #f7fafc; padding: 1rem; border-radius: 10px;">
+                <h4>Daily Sales</h4>
+                ${Object.entries(salesByDay).map(([date, amount]) => `
+                    <div style="display: flex; justify-content: space-between; margin: 0.5rem 0;">
+                        <span>${date}</span>
+                        <span>₦${amount.toLocaleString()}</span>
+                    </div>
+                `).join('')}
+                ${Object.keys(salesByDay).length === 0 ? '<p>No sales yet.</p>' : ''}
+            </div>
+        `;
+    }
+
+    function updateOrderStatus(orderId, newStatus) {
+        const orderIndex = orders.findIndex(o => o.id === orderId);
+        if (orderIndex !== -1) {
+            orders[orderIndex].status = newStatus;
+            orders[orderIndex].tracking.status = newStatus;
+            orders[orderIndex].tracking.updates.push({
+                status: newStatus,
+                description: `Order status updated to ${newStatus}`,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('orders', JSON.stringify(orders));
+            loadAdminDashboard();
+            alert(`Order ${orderId} status updated to ${newStatus}`);
+        }
+    }
+
+    // Page Navigation
+    function showPage(page) {
+        const pages = ['home', 'products', 'cart', 'tracking', 'admin'];
+        pages.forEach(p => {
+            const el = document.getElementById(`${p}Page`);
+            if (el) el.style.display = 'none';
+        });
+
+        document.getElementById(`${page}Page`).style.display = 'block';
+
+        if (page === 'home') {
+            displayProducts('featuredProducts', products.slice(0, 3));
+        } else if (page === 'products') {
+            displayProducts('allProducts', products);
+        } else if (page === 'cart') {
+            displayCart();
+        } else if (page === 'admin') {
+            loadAdminDashboard();
+        }
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Initialize
+    displayProducts('featuredProducts', products.slice(0, 3));
+    displayProducts('allProducts', products);
+    updateCart();
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
